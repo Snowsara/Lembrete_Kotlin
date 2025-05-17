@@ -1,50 +1,52 @@
 package com.example.lembrete
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lembrete.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
-    private val prefsName = "arquivo"
-    private val chaveLembrete = "lembrete_salvo"
-
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        val nome = intent.getStringExtra("NOME_USUARIO")
-        val sobrenome = intent.getStringExtra("SOBRENOME_USUARIO")
-        val idade = intent.getStringExtra("IDADE_USUARIO")
-        val textoBoasVindas = findViewById<TextView>(R.id.txtBoasVindas)
-        textoBoasVindas.text = "Olá, $nome $sobrenome ($idade anos) "
+        val prefs = getSharedPreferences("cadastro", MODE_PRIVATE)
 
-        val editLembrete = findViewById<EditText>(R.id.editLembrete)
-        val btnSalvar = findViewById<Button>(R.id.buttonSalvar)
-        val btnApagar = findViewById<Button>(R.id.buttonDeletar)
-        val textLembreteSalvo = findViewById<TextView>(R.id.textLembreteSalvo)
+        val emailSalvo = prefs.getString("EMAIL_USUARIO", "")
+        val senhaSalvo = prefs.getString("SENHA_USUARIO", "")
 
-        val prefs = getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+        val editEmail = binding.editEmail
+        val editSenha = binding.editSenha
 
+        val btnLogin = binding.btnLogin
+        val btnCadastro =  binding.btnCadastro
 
-        // Mostrar lembrete salvo ao abrir o app
-        textLembreteSalvo.text = prefs.getString(chaveLembrete, "Nenhum lembrete salvo")
+        btnLogin.setOnClickListener{
+            val email = editEmail.text.toString()
+            val senha = editSenha.text.toString()
 
-        btnSalvar.setOnClickListener {
-            val texto = editLembrete.text.toString()
-            prefs.edit().putString(chaveLembrete, texto).apply()
-            textLembreteSalvo.text = texto
+            if (email == emailSalvo && senha == senhaSalvo){
+                val nomeSalvo = prefs.getString("NOME_USUARIO", "Usuário")
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("NOME_USUARIO", nomeSalvo)
+                startActivity(intent)
+                finish()
+            }else{
+                Toast.makeText(this, "Email ou senha incorretos!", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        btnApagar.setOnClickListener {
-            prefs.edit().remove(chaveLembrete).apply()
-            textLembreteSalvo.text = "Nenhum lembrete salvo"
-            editLembrete.setText("")
+        btnCadastro.setOnClickListener{
+            startActivity(Intent(this, CadastroActivity::class.java))
+            finish()
         }
     }
+
 }
-
-
