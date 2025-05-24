@@ -1,9 +1,12 @@
 package com.example.lembrete
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lembrete.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+
 
 class MainActivity : AppCompatActivity() {
     private val prefsName = "arquivo"
@@ -15,15 +18,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null){
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        val nome = intent.getStringExtra("NOME_USUARIO")
-        val email = intent.getStringExtra("EMAIL_USUARIO")
-        val senha = intent.getStringExtra("SENHA_USUARIO")
         val textoBoasVindas = binding.txtBoasVindas
-        textoBoasVindas.text = "Olá, $nome"
+        val email = user?.email
+        textoBoasVindas.text = "Olá, $email"
 
         val editLembrete = binding.editLembrete
         val btnSalvar = binding.buttonSalvar

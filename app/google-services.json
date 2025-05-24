@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "507760825708",
+    "project_id": "lembrete1-c4fb8",
+    "storage_bucket": "lembrete1-c4fb8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507760825708:android:189940f81f40c45612cf49",
+        "android_client_info": {
+          "package_name": "com.example.lembrete"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArmbOeOJN_9mxSxmAzAK0xSxdsVYAgp-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

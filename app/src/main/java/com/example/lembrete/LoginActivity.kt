@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lembrete.databinding.ActivityLoginBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,11 +17,6 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        val prefs = getSharedPreferences("cadastro", MODE_PRIVATE)
-
-        val emailSalvo = prefs.getString("EMAIL_USUARIO", "")
-        val senhaSalvo = prefs.getString("SENHA_USUARIO", "")
 
         val editEmail = binding.editEmail
         val editSenha = binding.editSenha
@@ -31,15 +28,18 @@ class LoginActivity : AppCompatActivity() {
             val email = editEmail.text.toString()
             val senha = editSenha.text.toString()
 
-            if (email == emailSalvo && senha == senhaSalvo){
-                val nomeSalvo = prefs.getString("NOME_USUARIO", "Usuário")
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("NOME_USUARIO", nomeSalvo)
-                startActivity(intent)
-                finish()
+            if (email.isNotEmpty() && senha.isNotEmpty()){
+                auth.signInWithEmailAndPassword(email, senha).addOnCompleteListener { task ->
+                    if (task.isSuccessful){
+                        Toast.makeText(this, "Login feito com sucesso!", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this,MainActivity::class.java))
+                        finish()
+                    }else{
+                        Toast.makeText(this,"Erro no login: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
             }else{
-                Toast.makeText(this, "Email ou senha incorretos!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Preencha todos os campos", Toast.LENGTH_SHORT).show()
             }
         }
 
