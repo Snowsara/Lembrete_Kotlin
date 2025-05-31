@@ -29,14 +29,18 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+       val auth = FirebaseAuth.getInstance()
+
+
         val textoBoasVindas = binding.txtBoasVindas
         val email = user?.email
         textoBoasVindas.text = "Olá, $email"
 
         val editLembrete = binding.editLembrete
         val btnSalvar = binding.buttonSalvar
-        val btnApagar = binding.buttonDeletar
+        val btnDeletar = binding.buttonDeletar
         val textLembreteSalvo = binding.textLembreteSalvo
+        val btnSair = binding.buttonSair
 
         val prefs = getSharedPreferences(prefsName, Context.MODE_PRIVATE)
 
@@ -50,11 +54,21 @@ class MainActivity : AppCompatActivity() {
             textLembreteSalvo.text = texto
         }
 
-        btnApagar.setOnClickListener {
+        btnDeletar.setOnClickListener {
             prefs.edit().remove(chaveLembrete).apply()
             textLembreteSalvo.text = "Nenhum lembrete salvo"
             editLembrete.setText("")
         }
+
+        btnSair.setOnClickListener{
+            auth.signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
+
     }
 }
 

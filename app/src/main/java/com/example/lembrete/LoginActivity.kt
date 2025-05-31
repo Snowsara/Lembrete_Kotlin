@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lembrete.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -18,19 +19,37 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val editEmail = binding.editEmail
-        val editSenha = binding.editSenha
+        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+        auth = FirebaseAuth.getInstance()
+
+        val usuario = FirebaseAuth.getInstance().currentUser
+        if (usuario != null){
+            startActivity(Intent(this, MainActivity::class.java))
+            return
+        }
+
 
         val btnLogin = binding.btnLogin
         val btnCadastro =  binding.btnCadastro
 
         btnLogin.setOnClickListener{
-            val email = editEmail.text.toString()
-            val senha = editSenha.text.toString()
+
+            val email = binding.editEmail.text.toString()
+            val senha = binding.editSenha.text.toString()
 
             if (email.isNotEmpty() && senha.isNotEmpty()){
                 auth.signInWithEmailAndPassword(email, senha).addOnCompleteListener { task ->
                     if (task.isSuccessful){
+                        val user = FirebaseAuth.getInstance().currentUser
+                        user?.getIdToken(true)?.addOnCompleteListener { tokenTask ->
+                            if (tokenTask.isSuccessful) {
+                                val idToken: String? = tokenTask.result.token
+                                // Use the idToken
+                            } else {
+                                // Handle the error
+                            }
+                        }
                         Toast.makeText(this, "Login feito com sucesso!", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this,MainActivity::class.java))
                         finish()
