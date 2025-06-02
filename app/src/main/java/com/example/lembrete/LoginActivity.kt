@@ -24,45 +24,45 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         val usuario = FirebaseAuth.getInstance().currentUser
-        if (usuario != null){
+        if (usuario != null) {
             startActivity(Intent(this, MainActivity::class.java))
             return
         }
 
 
         val btnLogin = binding.btnLogin
-        val btnCadastro =  binding.btnCadastro
+        val btnCadastro = binding.btnCadastro
 
-        btnLogin.setOnClickListener{
+        btnLogin.setOnClickListener {
 
             val email = binding.editEmail.text.toString()
             val senha = binding.editSenha.text.toString()
 
-            if (email.isNotEmpty() && senha.isNotEmpty()){
-                auth.signInWithEmailAndPassword(email, senha).addOnCompleteListener { task ->
-                    if (task.isSuccessful){
-                        val user = FirebaseAuth.getInstance().currentUser
-                        user?.getIdToken(true)?.addOnCompleteListener { tokenTask ->
-                            if (tokenTask.isSuccessful) {
-                                val idToken: String? = tokenTask.result.token
-                                // Use the idToken
-                            } else {
-                                // Handle the error
+            if (email.isNotEmpty() && senha.isNotEmpty()) {
+                auth.signInWithEmailAndPassword(email, senha).addOnSuccessListener {
+                    val user = auth.currentUser
+                    user?.getIdToken(true)?.addOnCompleteListener { tokenTask ->
+                        if (tokenTask.isSuccessful) {
+                            val idToken = tokenTask.result?.token
+                            if (!idToken.isNullOrEmpty()) {
+                                Toast.makeText(this, "Login feito com sucesso!", Toast.LENGTH_SHORT)
+                                    .show()
+                                startActivity(Intent(this, MainActivity::class.java))
+                                finish()
                             }
+                        } else {
+                            Toast.makeText(this, "Erro ao obter token", Toast.LENGTH_SHORT).show()
                         }
-                        Toast.makeText(this, "Login feito com sucesso!", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this,MainActivity::class.java))
-                        finish()
-                    }else{
-                        Toast.makeText(this,"Erro no login: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                     }
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Erro no login: ${it.message}", Toast.LENGTH_LONG).show()
                 }
-            }else{
-                Toast.makeText(this,"Preencha todos os campos", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             }
         }
 
-        btnCadastro.setOnClickListener{
+        btnCadastro.setOnClickListener {
             startActivity(Intent(this, CadastroActivity::class.java))
             finish()
         }
