@@ -20,8 +20,8 @@ class CadastroActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        val editEmail = binding.editEmail
-        val editSenha = binding.editSenha
+        val editEmail = binding.editEmail1
+        val editSenha = binding.editSenha1
         val btnCadastrar = binding.btnCadastrar
 
         btnCadastrar.setOnClickListener {

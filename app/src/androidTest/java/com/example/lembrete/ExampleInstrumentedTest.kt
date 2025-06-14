@@ -1,5 +1,13 @@
 package com.example.lembrete
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
@@ -7,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
+import org.junit.Rule
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -15,10 +24,61 @@ import org.junit.Assert.*
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
     @Test
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.lembrete", appContext.packageName)
+
+        onView(withId(R.id.textView2)).check(matches(isDisplayed()))
+        onView(withId(R.id.editEmail)).check(matches(isDisplayed()))
+        onView(withId(R.id.editSenha)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnCadastro)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnLogin)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.textView2)).check(matches(withText("Que bom receber você!")))
+        onView(withId(R.id.btnCadastro)).perform(click())
+
+        // ------ TELA DE CADASTRO
+
+        onView(withId(R.id.textView)).check(matches(isDisplayed()))
+        onView(withId(R.id.editEmail1)).check(matches(isDisplayed()))
+        onView(withId(R.id.editSenha1)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnCadastrar)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.textView2)).check(matches(withText("Bem-vindo ao Lembrete!")))
+        onView(withId(R.id.editEmail1)).perform(typeText("teste@teste.com"), closeSoftKeyboard())
+        onView(withId(R.id.editSenha1)).perform(typeText("1234567"), closeSoftKeyboard())
+        onView(withId(R.id.btnCadastrar)).perform(click())
+
+        // ------- TELA DE LOGIN APÓS O CADASTRO
+        onView(withId(R.id.textView2)).check(matches(isDisplayed()))
+        onView(withId(R.id.editEmail)).check(matches(isDisplayed()))
+        onView(withId(R.id.editSenha)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnCadastro)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnLogin)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.textView2)).check(matches(withText("Que bom receber você!")))
+        onView(withId(R.id.editEmail)).perform(typeText("teste@teste.com"), closeSoftKeyboard())
+        onView(withId(R.id.editSenha)).perform(typeText("1234567"), closeSoftKeyboard())
+        onView(withId(R.id.btnLogin)).perform(click())
+
+        // ------ TELA DE LEMBRETE
+        onView(withId(R.id.txtBoasVindas)).check(matches(isDisplayed()))
+        onView(withId(R.id.editLembrete)).check(matches(isDisplayed()))
+        onView(withId(R.id.textLembreteSalvo)).check(matches(isDisplayed()))
+        onView(withId(R.id.buttonSalvar)).check(matches(isDisplayed()))
+        onView(withId(R.id.buttonDeletar)).check(matches(isDisplayed()))
+        onView(withId(R.id.buttonSair)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.textView2)).check(matches(withText("Olá, ")))
+        onView(withId(R.id.editLembrete)).perform(typeText("Limpar a casa"), closeSoftKeyboard())
+        onView(withId(R.id.textLembreteSalvo)).check(matches(withText("Nenhum lembrete salvo ")))
+        onView(withId(R.id.buttonSalvar)).perform(click())
+        onView(withId(R.id.buttonDeletar)).perform(click())
+        onView(withId(R.id.buttonSair)).perform(click())
+
     }
+
 }
