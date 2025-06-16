@@ -1,5 +1,7 @@
 package com.example.lembrete
 
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -30,6 +32,11 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.lembrete", appContext.packageName)
+
+        val activityScenario: ActivityScenario<LoginActivity> =
+            ActivityScenario.launch(LoginActivity::class.java)
+
+        activityScenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.textView2)).check(matches(isDisplayed()))
         onView(withId(R.id.editEmail)).check(matches(isDisplayed()))
