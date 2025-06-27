@@ -20,13 +20,13 @@ class CadastroActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        val editEmail = binding.editEmail1
-        val editSenha = binding.editSenha1
+        val editEmail1 = binding.editEmail1
+        val editSenha1 = binding.editSenha1
         val btnCadastrar = binding.btnCadastrar
 
         btnCadastrar.setOnClickListener {
-            val email = editEmail.text.toString()
-            val senha = editSenha.text.toString()
+            val email = editEmail1.text.toString()
+            val senha = editSenha1.text.toString()
 
             if (email.isNotEmpty() && senha.isNotEmpty()){
                 auth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener { task ->

@@ -19,16 +19,7 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-
         auth = FirebaseAuth.getInstance()
-
-        val usuario = FirebaseAuth.getInstance().currentUser
-        if (usuario != null) {
-            startActivity(Intent(this, MainActivity::class.java))
-            return
-        }
-
 
         val btnLogin = binding.btnLogin
         val btnCadastro = binding.btnCadastro
@@ -47,7 +38,10 @@ class LoginActivity : AppCompatActivity() {
                             if (!idToken.isNullOrEmpty()) {
                                 Toast.makeText(this, "Login feito com sucesso!", Toast.LENGTH_SHORT)
                                     .show()
-                                startActivity(Intent(this, MainActivity::class.java))
+                                val usuario = FirebaseAuth.getInstance().currentUser
+                                if (usuario != null) {
+                                    startActivity(Intent(this, MainActivity::class.java))
+                                }
                                 finish()
                             }
                         } else {
