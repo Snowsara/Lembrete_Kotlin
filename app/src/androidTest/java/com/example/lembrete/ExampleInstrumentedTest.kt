@@ -88,9 +88,12 @@ class ExampleInstrumentedTest {
 
         onView(withId(R.id.txtBoasVindas)).check(matches(withText("Olá, teste12@gmail.com")))
         onView(withId(R.id.editLembrete)).perform(typeText("Limpar a casa"), closeSoftKeyboard())
+        Thread.sleep(5000)
         onView(withId(R.id.buttonSalvar)).perform(click())
         onView(withId(R.id.textLembreteSalvo)).check(matches(withText("Limpar a casa")))
+        Thread.sleep(5000)
         onView(withId(R.id.buttonDeletar)).perform(click())
+        Thread.sleep(5000)
         onView(withId(R.id.buttonSair)).perform(click())
 
     }
